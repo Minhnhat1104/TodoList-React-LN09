@@ -1,15 +1,14 @@
 import { Add } from "@mui/icons-material";
 import { Button, Stack, TextField } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { TodoItem } from "../types";
 import { generateUuid, getTodoList, updateTodoList } from "../utils";
+import { TodoContext } from "./TodoProvider";
 
-interface TodoWriteProps {
-  onRefresh: () => void;
-}
+interface TodoWriteProps {}
 
 const TodoWrite = (props: TodoWriteProps) => {
-  const { onRefresh } = props;
+  const { onRefresh } = useContext(TodoContext) || {};
 
   // state
   const [isAdding, setIsAdding] = useState<boolean>(false);
@@ -27,7 +26,7 @@ const TodoWrite = (props: TodoWriteProps) => {
     ];
 
     updateTodoList(newItems);
-    onRefresh();
+    onRefresh && onRefresh();
     setAddValue("");
     setIsAdding(false);
   };

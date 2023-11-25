@@ -5,23 +5,22 @@ import {
   FormControlLabel,
   Radio,
 } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import { FilterInterface, FilterMode } from "../types";
+import { TodoContext } from "./TodoProvider";
 
-interface FilterProps {
-  value: FilterInterface;
-  onChange: (nVal: any, field: "mode" | "keyword") => void;
-}
+interface FilterProps {}
 
 const Filter = (props: FilterProps) => {
-  const { value, onChange } = props;
+  const { filter: value, onFilterChange } = useContext(TodoContext) || {};
+
   return (
     <>
       <TextField
-        value={value.keyword}
+        value={value?.keyword || ""}
         onChange={(
           e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-        ) => onChange(e.target.value, "keyword")}
+        ) => onFilterChange && onFilterChange(e.target.value, "keyword")}
         size="small"
         placeholder="Type to search..."
       />
@@ -29,11 +28,11 @@ const Filter = (props: FilterProps) => {
       <FormControl>
         <RadioGroup
           aria-labelledby="demo-radio-buttons-group-label"
-          value={value.mode}
+          value={value?.mode}
           onChange={(
             event: React.ChangeEvent<HTMLInputElement>,
             value: string
-          ) => onChange(value, "mode")}
+          ) => onFilterChange && onFilterChange(value, "mode")}
           name="radio-buttons-group"
           row
         >

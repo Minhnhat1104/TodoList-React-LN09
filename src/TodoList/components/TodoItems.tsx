@@ -1,15 +1,13 @@
 import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import { TodoItem } from "../types";
 import { getTodoList, updateTodoList } from "../utils";
+import { TodoContext } from "./TodoProvider";
 
-interface TodoItemsProps {
-  items: TodoItem[];
-  onRefresh: () => void;
-}
+interface TodoItemsProps {}
 
 const TodoItems = (props: TodoItemsProps) => {
-  const { items, onRefresh } = props;
+  const { items, onRefresh } = useContext(TodoContext) || {};
 
   const handleCheck = (itemId: string, isChecked: boolean) => {
     const items = getTodoList();
@@ -24,7 +22,7 @@ const TodoItems = (props: TodoItemsProps) => {
       }
     });
     updateTodoList(newItems);
-    onRefresh();
+    onRefresh && onRefresh();
   };
 
   return (
