@@ -7,6 +7,7 @@ export enum FilterMode {
 export interface TodoItem {
   checked: boolean;
   name: string;
+  id: string;
 }
 
 export interface FilterInterface {

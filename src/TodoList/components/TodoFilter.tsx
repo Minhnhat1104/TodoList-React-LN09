@@ -6,7 +6,7 @@ import {
   Radio,
 } from "@mui/material";
 import React from "react";
-import { FilterInterface, FilterMode } from "./type";
+import { FilterInterface, FilterMode } from "../types";
 
 interface FilterProps {
   value: FilterInterface;

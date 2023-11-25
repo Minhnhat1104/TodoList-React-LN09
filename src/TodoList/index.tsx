@@ -1,11 +1,11 @@
-import { Box, FormGroup, Stack, Typography, useTheme } from "@mui/material";
+import { Box, Stack, Typography, useTheme } from "@mui/material";
 import { blue } from "@mui/material/colors";
 import React, { useEffect, useState } from "react";
-import { getTodoList, updateTodoList } from "./utils";
-import { FilterInterface, FilterMode, TodoItem } from "./type";
-import Item from "./TodoItem";
-import Filter from "./Filter";
-import TodoWrite from "./TodoWrite";
+import { getTodoList } from "./utils";
+import { FilterInterface, FilterMode, TodoItem } from "./types";
+import TodoFilter from "./components/TodoFilter";
+import TodoWrite from "./components/TodoWrite";
+import TodoItems from "./components/TodoItems";
 
 const TodoList = () => {
   const theme = useTheme();
@@ -44,13 +44,6 @@ const TodoList = () => {
     }));
   };
 
-  const handleCheck = (itemIdx: number, isChecked: boolean) => {
-    const items = getTodoList();
-    items[itemIdx].checked = isChecked;
-    updateTodoList(items);
-    refreshItems();
-  };
-
   return (
     <Box display="flex" width="100%" height="100vh">
       <Stack margin="auto" spacing={1} sx={{ background: blue[100] }} p={2}>
@@ -59,18 +52,10 @@ const TodoList = () => {
         </Typography>
 
         {/* Filter */}
-        <Filter value={filter} onChange={handleFilterChange} />
+        <TodoFilter value={filter} onChange={handleFilterChange} />
 
         {/* Todo Items */}
-        <FormGroup>
-          {renderItems?.map((_item: TodoItem, i: number) => (
-            <Item
-              key={i}
-              value={_item}
-              onChecked={(checked: boolean) => handleCheck(i, checked)}
-            />
-          ))}
-        </FormGroup>
+        <TodoItems items={renderItems} onRefresh={refreshItems} />
 
         {/* Add */}
         <TodoWrite onRefresh={refreshItems} />
