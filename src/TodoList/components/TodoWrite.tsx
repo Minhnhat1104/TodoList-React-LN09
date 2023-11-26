@@ -1,32 +1,24 @@
 import { Add } from "@mui/icons-material";
 import { Button, Stack, TextField } from "@mui/material";
 import React, { useContext, useState } from "react";
-import { TodoItem } from "../types";
-import { generateUuid, getTodoList, updateTodoList } from "../utils";
+import { TodoDispatchType } from "../types";
 import { TodoContext } from "./TodoProvider";
 
 interface TodoWriteProps {}
 
 const TodoWrite = (props: TodoWriteProps) => {
-  const { onRefresh } = useContext(TodoContext) || {};
+  const { todoDispatch } = useContext(TodoContext) || {};
 
   // state
   const [isAdding, setIsAdding] = useState<boolean>(false);
   const [addValue, setAddValue] = useState<string>("");
 
   const handeSave = () => {
-    let items = getTodoList();
-    const newItems: TodoItem[] = [
-      ...items,
-      {
-        id: generateUuid(),
-        checked: false,
-        name: addValue,
-      },
-    ];
-
-    updateTodoList(newItems);
-    onRefresh && onRefresh();
+    todoDispatch &&
+      todoDispatch({
+        type: TodoDispatchType.ADD,
+        addValue: addValue,
+      });
     setAddValue("");
     setIsAdding(false);
   };

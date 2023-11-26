@@ -1,28 +1,20 @@
 import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 import React, { useContext } from "react";
-import { TodoItem } from "../types";
-import { getTodoList, updateTodoList } from "../utils";
+import { TodoDispatchType, TodoItem } from "../types";
 import { TodoContext } from "./TodoProvider";
 
 interface TodoItemsProps {}
 
 const TodoItems = (props: TodoItemsProps) => {
-  const { items, onRefresh } = useContext(TodoContext) || {};
+  const { items, todoDispatch } = useContext(TodoContext) || {};
 
-  const handleCheck = (itemId: string, isChecked: boolean) => {
-    const items = getTodoList();
-    const newItems = items.map((_item: TodoItem) => {
-      if (_item.id === itemId) {
-        return {
-          ..._item,
-          checked: isChecked,
-        };
-      } else {
-        return _item;
-      }
-    });
-    updateTodoList(newItems);
-    onRefresh && onRefresh();
+  const handleCheck = (item: TodoItem, isChecked: boolean) => {
+    todoDispatch &&
+      todoDispatch({
+        type: TodoDispatchType.CHECK,
+        data: item,
+        isChecked: isChecked,
+      });
   };
 
   return (
@@ -36,7 +28,7 @@ const TodoItems = (props: TodoItemsProps) => {
               onChange={(
                 event: React.ChangeEvent<HTMLInputElement>,
                 checked: boolean
-              ) => handleCheck(_item.id, checked)}
+              ) => handleCheck(_item, checked)}
             />
           }
           label={_item.name}

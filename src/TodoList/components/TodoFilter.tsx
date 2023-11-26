@@ -6,13 +6,26 @@ import {
   Radio,
 } from "@mui/material";
 import React, { useContext } from "react";
-import { FilterInterface, FilterMode } from "../types";
+import { FilterMode, TodoDispatchType } from "../types";
 import { TodoContext } from "./TodoProvider";
 
 interface FilterProps {}
 
 const Filter = (props: FilterProps) => {
-  const { filter: value, onFilterChange } = useContext(TodoContext) || {};
+  const { filter: value, todoDispatch } = useContext(TodoContext) || {};
+
+  const handleFilterChange = (nVal: any, field: "mode" | "keyword") => {
+    const newFilter = {
+      ...value,
+      [field]: nVal,
+    };
+
+    todoDispatch &&
+      todoDispatch({
+        type: TodoDispatchType.UPDATE_FILTER,
+        filter: newFilter,
+      });
+  };
 
   return (
     <>
@@ -20,7 +33,9 @@ const Filter = (props: FilterProps) => {
         value={value?.keyword || ""}
         onChange={(
           e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-        ) => onFilterChange && onFilterChange(e.target.value, "keyword")}
+        ) =>
+          handleFilterChange && handleFilterChange(e.target.value, "keyword")
+        }
         size="small"
         placeholder="Type to search..."
       />
@@ -32,7 +47,7 @@ const Filter = (props: FilterProps) => {
           onChange={(
             event: React.ChangeEvent<HTMLInputElement>,
             value: string
-          ) => onFilterChange && onFilterChange(value, "mode")}
+          ) => handleFilterChange && handleFilterChange(value, "mode")}
           name="radio-buttons-group"
           row
         >
